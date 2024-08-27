@@ -43,37 +43,10 @@
 
     <!-- android -->
     <platform name="android">
-        <preference name="ANDROID_REDIRECT_SCHEME" default=" " />
-        <preference name="ANDROID_REDIRECT_DATA_ELEMENT" default=" " />
-
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="OIDCBasic">
                 <param name="android-package" value="com.mico.cordova.plugin.oidc.basic.OIDCBasic"/>
             </feature>
-        </config-file>
-
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <!-- Enable AppAuth-Android to handle OIDC redirects -->
-            <activity android:name="net.openid.appauth.RedirectUriReceiverActivity" android:exported="true" tools:node="replace" xmlns:tools="http://schemas.android.com/tools">
-                <!-- Support redirect using simple custom URL scheme via ANDROID_REDIRECT_SCHEME variable. -->
-                <intent-filter>
-                    <action android:name="android.intent.action.VIEW"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                    <category android:name="android.intent.category.BROWSABLE"/>
-                    <data android:scheme="$ANDROID_REDIRECT_SCHEME"/>
-                </intent-filter>
-                <!-- Support redirect to another URL, e.g. an https App Link, via
-                    ANDROID_REDIRECT_DATA_ELEMENT variable. Note that the placement
-                    of the $ANDROID_REDIRECT_DATA_ELEMENT token, immediately after
-                    the opening <intent-filter> tag, seems to be needed for cordova
-                    to interpolate that value, otherwise cordova behaves as if the
-                    token weren't there at all. -->
-                <intent-filter>$ANDROID_REDIRECT_DATA_ELEMENT
-                    <action android:name="android.intent.action.VIEW"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                    <category android:name="android.intent.category.BROWSABLE"/>
-                </intent-filter>
-            </activity>
         </config-file>
 
         <source-file src="src/android/OIDCBasic.java" target-dir="src/com/mico/cordova/plugin/oidc/basic"/>
