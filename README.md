@@ -1,10 +1,12 @@
 # Cordova Plugin OpenID Connect (OIDC) Basic
 
+## Intro
+Plug-in by mi-corporation, adapted for personal use. Might not fit your needs, but will be kept up to date.
+
 ## Dependencies
 This plugin aims to be a thin wrapper around the following libraries/APIs:
 - iOS -- [AppAuth-iOS](https://github.com/openid/AppAuth-iOS)
 - Android -- [AppAuth-Android](https://github.com/openid/AppAuth-Android)
-- Windows -- The [Web Authentication Broker](https://docs.microsoft.com/en-us/uwp/api/Windows.Security.Authentication.Web.WebAuthenticationBroker) API
 
 ## Usage
 ```js
@@ -42,62 +44,62 @@ cordova.plugins.oidc.basic.presentAuthorizationRequest(req,
 ### Configuring the `redirectUrl`
 To successfully receive redirects on all platforms, your `redirectUrl` must adhere to the following conventions:
 - For iOS, use a custom URL scheme. No pre-registration of your custom scheme is needed provided you're targeting
-    iOS 11+. For iOS 10 and below, you need to declare your custom scheme in your `*-Info.plist` file. You can use
-    the [Custom-URL-scheme plugin](https://github.com/EddyVerbruggen/Custom-URL-scheme) to do this. See
-    https://github.com/EddyVerbruggen/Custom-URL-scheme#2-installation.
+  iOS 11+. For iOS 10 and below, you need to declare your custom scheme in your `*-Info.plist` file. You can use
+  the [Custom-URL-scheme plugin](https://github.com/EddyVerbruggen/Custom-URL-scheme) to do this. See
+  https://github.com/EddyVerbruggen/Custom-URL-scheme#2-installation.
 
 - For Android, you can use a custom URL scheme or an [app link](https://developer.android.com/training/app-links).
-    Either way, the redirect url must be configured at plugin add time via one of the variables
-    `ANDROID_REDIRECT_SCHEME` or `ANDROID_REDIRECT_DATA_ELEMENT` (either one is sufficient).
+  Either way, the redirect url must be configured at plugin add time via one of the variables
+  `ANDROID_REDIRECT_SCHEME` or `ANDROID_REDIRECT_DATA_ELEMENT` (either one is sufficient).
 
-    To use a custom URL scheme, e.g. `com.example.myapp`, use the `ANDROID_REDIRECT_SCHEME` variable, e.g.
+  To use a custom URL scheme, e.g. `com.example.myapp`, use the `ANDROID_REDIRECT_SCHEME` variable, e.g.
     ```
     cordova plugin add https://github.com/mi-corporation/cordova-plugin-oidc-basic.git --variable ANDROID_REDIRECT_SCHEME=com.example.myapp
     ```
-    To use an [app link](https://developer.android.com/training/app-links) for
-    Android M and above, set the `ANDROID_REDIRECT_DATA_ELEMENT` variable to the matching XML `<data>`
-    element. Make sure to escape this XML appropriately for whatever command shell you're using. E.g.
-    if your app link is `https://myapp.example.com/oidc_redirect` and you're using zsh/bash/etc, do
+  To use an [app link](https://developer.android.com/training/app-links) for
+  Android M and above, set the `ANDROID_REDIRECT_DATA_ELEMENT` variable to the matching XML `<data>`
+  element. Make sure to escape this XML appropriately for whatever command shell you're using. E.g.
+  if your app link is `https://myapp.example.com/oidc_redirect` and you're using zsh/bash/etc, do
     ```
     cordova plugin add https://github.com/mi-corporation/cordova-plugin-oidc-basic.git --variable ANDROID_REDIRECT_DATA_ELEMENT="<data android:scheme=\"https\" android:host=\"myapp.example.com\" android:path=\"/oidc_redirect\" />"
     ```
-    Or on a Windows command prompt, do
+  Or on a Windows command prompt, do
     ```
     cordova plugin add https://github.com/mi-corporation/cordova-plugin-oidc-basic.git --variable ANDROID_REDIRECT_DATA_ELEMENT="<data android:scheme=""https"" android:host=""myapp.example.com"" android:path=""/oidc_redirect"" />"
     ```
-    All `<data>` element attributes are supported. See https://developer.android.com/guide/topics/manifest/data-element
+  All `<data>` element attributes are supported. See https://developer.android.com/guide/topics/manifest/data-element
 - For Windows, the `redirectUrl` can be any URL. No preregistration of your `redirectUrl`
-is required.
+  is required.
 
 ### Tips on CocoaPods Setup on iOS
 The iOS plugin uses [CocoaPods](https://cocoapods.org/) to bundle [AppAuth-iOS](https://github.com/openid/AppAuth-iOS). If you haven't used CocoaPods before, you may find the following setup steps helpful:
 - Download CocoaPods onto your iOS development machine either from https://cocoapods.org/app or by
-following the steps at https://guides.cocoapods.org/using/getting-started.html. The first link installs a small GUI application. When it prompts you to install the CLI tool, say yes. The second link installs just
-the CLI tool.
+  following the steps at https://guides.cocoapods.org/using/getting-started.html. The first link installs a small GUI application. When it prompts you to install the CLI tool, say yes. The second link installs just
+  the CLI tool.
 - You'll need to clone the CocoaPods Master repo before you perform iOS builds. Follow the steps at
-https://stackoverflow.com/a/39904450 to minimize the size of the clone. Be aware that "minimize" is relative:
-as of March 2020, a shallow clone still took 1.94GB on my box.
+  https://stackoverflow.com/a/39904450 to minimize the size of the clone. Be aware that "minimize" is relative:
+  as of March 2020, a shallow clone still took 1.94GB on my box.
 - After you `cordova plugin add` this plugin, it'll create a new `*.xcworkspace` file (e.g. `MyApp.xcworkspace`) next to your existing `*.xcodeproj` file in `.../platforms/ios`. Open the `*.xcworkspace` file
-in XCode instead of the `*.xcodeproj` file. If you open just the `*.xcodeproj` file, XCode will fail to
-include AppAuth-iOS when you try to build.
+  in XCode instead of the `*.xcodeproj` file. If you open just the `*.xcodeproj` file, XCode will fail to
+  include AppAuth-iOS when you try to build.
 
 ## Supported Features
 - OpenID Connect authentication requests and OAuth 2.0 authorization requests.
-Use `presentAuthorizationRequest`.
+  Use `presentAuthorizationRequest`.
 
-    Authorization code flow, implicit flow, and OpenID Connect hybrid flow are all supported.
-    See https://openid.net/specs/openid-connect-core-1_0.html#Authentication
-    and https://tools.ietf.org/html/rfc6749#section-4.
+  Authorization code flow, implicit flow, and OpenID Connect hybrid flow are all supported.
+  See https://openid.net/specs/openid-connect-core-1_0.html#Authentication
+  and https://tools.ietf.org/html/rfc6749#section-4.
 
-    Supported on all platforms.
+  Supported on all platforms.
 
 - OpenID Connect RP-initiated logout.
-Use `presentEndSessionRequest`.
+  Use `presentEndSessionRequest`.
 
-    See https://openid.net/specs/openid-connect-session-1_0.html#RPLogout.
+  See https://openid.net/specs/openid-connect-session-1_0.html#RPLogout.
 
-    Supported on iOS and Windows. *Not supported on Android* (due to missing AppAuth-Android support,
-    see https://github.com/openid/AppAuth-Android/issues/374).
+  Supported on iOS and Windows. *Not supported on Android* (due to missing AppAuth-Android support,
+  see https://github.com/openid/AppAuth-Android/issues/374).
 
 This plugin does not (and likely will not) provide APIs to perform a token request as part of the
 authorization code or hybrid flows or validate the OpenID Connect ID token returned from a token request or
@@ -105,13 +107,13 @@ as part of the implicit flow. Since those steps require no user interaction, the
 Cordova plugin support. If you're looking to perform those steps in app, consider resources such as
 - [AppAuth-JS](https://github.com/openid/AppAuth-JS), which supports sending token requests
 - [jwt-decode](https://github.com/auth0/jwt-decode), which supports decoding (though not validating) JWT
-tokens
+  tokens
 
 Or you can perform your token request and ID token validation server-side. For a node server, consider
 resources such as
 - [AppAuth-JS](https://github.com/openid/AppAuth-JS), which works in Node as well as in browser
 - [node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken), which supports decoding and validating JWT
-tokens
+  tokens
 
 
 
@@ -127,16 +129,16 @@ multiple concurrent login screens.
 ### Error types
 All error types are available via `cordova.plugins.oidc.basic.ErrorType`. Explanation of types:
 - `cordova.plugins.oidc.basic.ErrorType.UNSENDABLE_REQUEST` -- The calling code did something wrong,
-e.g. passed an invalid authorization request, such that the request couldn't even be sent to the
-authorization server.
+  e.g. passed an invalid authorization request, such that the request couldn't even be sent to the
+  authorization server.
 - `cordova.plugins.oidc.basic.ErrorType.ERROR_RESPONSE` -- The authorization server returned an error
-response as specified in https://tools.ietf.org/html/rfc6749#section-4.1.2.1.
+  response as specified in https://tools.ietf.org/html/rfc6749#section-4.1.2.1.
 - `cordova.plugins.oidc.basic.ErrorType.INVALID_RESPONSE` -- The authorization server returned an
-invalid response not in keeping w/ the OpenID Connect/OAuth 2.0 spec.
+  invalid response not in keeping w/ the OpenID Connect/OAuth 2.0 spec.
 - `cordova.plugins.oidc.basic.ErrorType.HTTP_ERROR` -- There was an HTTP error completing the request.
 - `cordova.plugins.oidc.basic.ErrorType.USER_CANCELLED` -- The user cancelled the request.
 - `cordova.plugins.oidc.basic.ErrorType.UNEXPECTED_ERROR` -- There was an unexpected error completing
-the request.
+  the request.
 
 ### Error interface
 All errors passed to the provided error callback are normal JS `Error`s extended with the following
